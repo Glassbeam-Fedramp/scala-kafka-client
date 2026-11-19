@@ -2,7 +2,7 @@ package cakesolutions.kafka
 
 import cakesolutions.kafka.TypesafeConfigExtensions._
 import com.typesafe.config.Config
-import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy, KafkaConsumer => JKafkaConsumer}
+import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer => JKafkaConsumer}
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.IsolationLevel
 import org.apache.kafka.common.serialization.Deserializer
@@ -62,7 +62,7 @@ object KafkaConsumer {
       maxPollRecords: Int = 500,
       maxPollInterval: Int = 300000,
       maxMetaDataAge : Long = 300000,             
-      autoOffsetReset: OffsetResetStrategy = OffsetResetStrategy.LATEST,
+      autoOffsetReset: String = "latest",
       isolationLevel: IsolationLevel = IsolationLevel.READ_UNCOMMITTED
     ): Conf[K, V] = {
 

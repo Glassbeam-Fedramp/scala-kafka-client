@@ -270,7 +270,7 @@ object KafkaConsumerActor {
       */
     def apply(config: Config): Conf = Conf().withConf(config)
 
-    def durationFromConfig(config: Config, path: String) = Duration(config.getDuration(path, Millis), Millis)
+    def durationFromConfig(config: Config, path: String) = scala.concurrent.duration.Duration(config.getDuration(path, Millis), Millis)
   }
 
   /**
@@ -902,7 +902,7 @@ private final class KafkaConsumerActorImpl[K: TypeTag, V: TypeTag](
   private def pollKafka(state: StateData, timeout: Int): Option[Records] =
     tryWithConsumer(state) {
       log.debug("Poll Kafka for {} milliseconds", timeout)
-      val rs = consumer.poll(timeout)
+      val rs = consumer.poll(java.time.Duration.ofMillis(timeout))
       log.debug("Poll Complete!")
       if (rs.count() > 0)
         Some(ConsumerRecords(currentConsumerOffsets, rs))

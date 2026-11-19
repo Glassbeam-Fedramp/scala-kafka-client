@@ -62,7 +62,7 @@ object KafkaConsumer {
       maxPollRecords: Int = 500,
       maxPollInterval: Int = 300000,
       maxMetaDataAge : Long = 300000,             
-      autoOffsetReset: OffsetResetStrategy = OffsetResetStrategy.LATEST,
+      autoOffsetReset: String = "latest",
       isolationLevel: IsolationLevel = IsolationLevel.READ_UNCOMMITTED
     ): Conf[K, V] = {
 
