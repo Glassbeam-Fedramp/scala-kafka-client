@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 import cakesolutions.kafka.TypesafeConfigExtensions._
 import com.typesafe.config.Config
-import org.apache.kafka.clients.consumer.OffsetAndMetadata
+import org.apache.kafka.clients.consumer.{ConsumerGroupMetadata, OffsetAndMetadata}
 import org.apache.kafka.clients.producer.{Callback, ProducerConfig, ProducerRecord, RecordMetadata, KafkaProducer => JKafkaProducer, Producer => JProducer}
 import org.apache.kafka.common.{PartitionInfo, TopicPartition}
 import org.apache.kafka.common.serialization.Serializer
@@ -67,7 +67,7 @@ trait KafkaProducerLike[K, V] {
     *
     * @see Java `KafkaProducer` [[http://kafka.apache.org/0110/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html#sendOffsetsToTransaction(java.util.Map,%20java.lang.String) sendOffsetsToTransaction]] method
     */
-  def sendOffsetsToTransaction(offsets: Map[TopicPartition, OffsetAndMetadata], consumerGroupId: String): Unit
+  def sendOffsetsToTransaction(offsets: Map[TopicPartition, OffsetAndMetadata], consumerGroupMetadata: ConsumerGroupMetadata): Unit
 
   /**
     * Commits the transaction.
@@ -270,8 +270,8 @@ final class KafkaProducer[K, V](val producer: JProducer[K, V]) extends KafkaProd
   override def beginTransaction(): Unit =
     producer.beginTransaction()
 
-  override def sendOffsetsToTransaction(offsets: Map[TopicPartition, OffsetAndMetadata], consumerGroupId: String): Unit =
-    producer.sendOffsetsToTransaction(offsets.asJava, consumerGroupId)
+  override def sendOffsetsToTransaction(offsets: Map[TopicPartition, OffsetAndMetadata], consumerGroupMetadata: ConsumerGroupMetadata): Unit =
+    producer.sendOffsetsToTransaction(offsets.asJava, consumerGroupMetadata)
 
   override def commitTransaction(): Unit =
     producer.commitTransaction()
